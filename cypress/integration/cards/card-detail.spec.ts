@@ -2,20 +2,26 @@ import { Card } from '../../../src/app/card'
 
 describe('Test card-detail', () => {
     it('Test cards details are displayed"', () => {
+        cy.fixture('cards/cards').then((cards: Card[]) => {
+            cy.intercept('GET', Cypress.env('apiCards'), {
+                statusCode: 200,
+                body: cards
+            }).as('get-cards')
 
-        cy.visit('/cards')
-        cy.get('ul.cards > li').first().click()
+            cy.visit('/cards')
+            cy.wait('@get-cards')
 
-        cy.fixture('cards/dark-magician').then((card: Card) => {
+            cy.get('ul.cards > li').first().click()
+            
             // Test card details are displayed.
-            cy.get('#card-name').should('have.text', card.name)
-            cy.get('#card-type').should('have.text', card.type)
-            cy.get('#card-desc').should('have.text', card.desc)
-            cy.get('#card-atk').should('have.text', card.atk)
-            cy.get('#card-def').should('have.text', card.def)
-            cy.get('#card-level').should('have.text', card.level)
-            cy.get('#card-race').should('have.text', card.race)
-            cy.get('#card-attribute').should('have.text', card.attribute)
+            cy.get('#card-name').should('have.text', cards[0].name)
+            cy.get('#card-type').should('have.text', cards[0].type)
+            cy.get('#card-desc').should('have.text', cards[0].desc)
+            cy.get('#card-atk').should('have.text', cards[0].atk)
+            cy.get('#card-def').should('have.text', cards[0].def)
+            cy.get('#card-level').should('have.text', cards[0].level)
+            cy.get('#card-race').should('have.text', cards[0].race)
+            cy.get('#card-attribute').should('have.text', cards[0].attribute)
         })
     })
 })
