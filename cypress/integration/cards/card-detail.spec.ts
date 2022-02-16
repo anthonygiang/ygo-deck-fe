@@ -2,13 +2,11 @@ import { Card } from '../../../src/app/card'
 
 describe('Test card-detail', () => {
     it('Test cards details are displayed"', () => {
+
+        cy.visit('/cards')
+        cy.get('ul.cards > li').first().click()
+
         cy.fixture('cards/dark-magician').then((card: Card) => {
-            let cardName = (card.name).replace(/%20/g, " ")
-
-            // Visit card route.
-            cy.visit('/cards/' + cardName)
-            cy.wait('@get-card-by-name')
-
             // Test card details are displayed.
             cy.get('#card-name').should('have.text', card.name)
             cy.get('#card-type').should('have.text', card.type)
